@@ -1,15 +1,19 @@
 package com.example.listycity;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+
 class CityListTest {
     private CityList mockCityList() {
         CityList cityList = new CityList();
         cityList.add(mockCity());
         return cityList;
     }
+
     private City mockCity() {
         return new City("Edmonton", "Alberta");
     }
+
     @Test
     void testAdd() {
         CityList cityList = mockCityList();
@@ -19,18 +23,17 @@ class CityListTest {
         assertEquals(2, cityList.getCities().size());
         assertTrue(cityList.getCities().contains(city));
     }
+
     @Test
     void testAddException() {
         CityList cityList = mockCityList();
-        City city = new City("Yellowknife", "Northwest Territories");
-        cityList.add(city);
-        assertThrows(IllegalArgumentException.class, () -> {
-            cityList.add(city);
-        });
+        assertThrows(IllegalArgumentException.class, () -> cityList.add(mockCity()));
     }
 
     @Test
+
     void testGetCities() {
+
         CityList cityList = mockCityList();
         // This line checks if the first city in the cityList (retrieved by cityList.getCities().get(0))
         // is the same as the city returned by mockCity()
@@ -41,5 +44,43 @@ class CityListTest {
         // Now the original city should be at position 1
         assertEquals(0, city.compareTo(cityList.getCities().get(0)));
         assertEquals(0, mockCity().compareTo(cityList.getCities().get(1)));
+    }
+
+@Test
+    void testHasCity() {
+        CityList cityList = mockCityList();
+        City existingCity = new City("Edmonton", "Alberta"); // Same values as mockCity
+        City nonExistingCity = new City("Calgary", "Alberta");
+        assertTrue(cityList.hasCity(existingCity));
+        assertFalse(cityList.hasCity(nonExistingCity));
+    }
+
+    @Test
+    void testDelete() {
+        CityList cityList = mockCityList();
+        City cityToDelete = new City("Edmonton", "Alberta");
+        // Ensures city is there before deleting
+        assertTrue(cityList.hasCity(cityToDelete));
+        assertEquals(1, cityList.countCities());
+
+        cityList.delete(cityToDelete);
+        // Ensures city is gone after deleting
+        assertFalse(cityList.hasCity(cityToDelete));
+        assertEquals(0, cityList.countCities());
+    }
+
+    @Test
+    void testDeleteException() {
+        CityList cityList = mockCityList();
+        City nonExistingCity = new City("Calgary", "Alberta");
+        assertThrows(IllegalArgumentException.class, () -> cityList.delete(nonExistingCity));
+    }
+
+    @Test
+    void testCountCities() {
+        CityList cityList = mockCityList();
+        assertEquals(1, cityList.countCities());
+        cityList.add(new City("Winnipeg", "Manitoba"));
+        assertEquals(2, cityList.countCities());
     }
 }

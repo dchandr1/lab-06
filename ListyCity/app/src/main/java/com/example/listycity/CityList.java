@@ -19,6 +19,7 @@ public class CityList {
         }
         cities.add(city);
     }
+
     /**
      * This returns a sorted list of cities
      * @return
@@ -28,5 +29,20 @@ public class CityList {
         List<City> list = cities;
         Collections.sort(list);
         return list;
+    }
+
+    public boolean hasCity(City city) {
+        return cities.contains(city);
+    }
+
+    public void delete(City city) {
+        if (!cities.contains(city)) {
+            throw new IllegalArgumentException("This city is not in the list.");
+        }
+        cities.remove(city);
+    }
+
+    public int countCities() {
+        return cities.size();
     }
 }
